@@ -42,7 +42,7 @@ void makeTrie(char* p, int cursor, int num){
 
     if (patterns[num].empty()) {
         patterns[num].insert(pair<int, char>(++nodeNum, p[cursor]));
-        //cout << "map" << num << " at " << nodeNum << ":" << patterns[num].at(nodeNum) << endl;//for debugging
+        //cout << num << "->" << nodeNum << ":" << patterns[num].at(nodeNum) << endl;//for debugging
         makeTrie(p, cursor+1, num+1);
         return;
     }
@@ -55,6 +55,6 @@ void makeTrie(char* p, int cursor, int num){
     }
 
     patterns[num].insert(std::pair<int, char>(++nodeNum, p[cursor]));
-    //cout << "map" << num << " at " << nodeNum << ":" << patterns[num].at(nodeNum) << endl;//for debugging
+    //cout << num << "->" << nodeNum << ":" << patterns[num].at(nodeNum) << endl;//for debugging
     makeTrie(p, cursor+1, nodeNum);
 }

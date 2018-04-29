@@ -3,7 +3,7 @@
 #include <map>
 
 using namespace std;
-#define maxCharNum 256
+#define maxCharNum 256 //定義一行最多幾個char
 
 void makeTrie(char* cursor, int currentNode);
 vector<map<int, char>> patterns;

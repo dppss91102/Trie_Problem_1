@@ -3,6 +3,7 @@
 #include <map>
 
 using namespace std;
+#define maxCharNum 256
 
 void makeTrie(char* cursor, int currentNode);
 vector<map<int, char>> patterns;
@@ -15,9 +16,9 @@ int main() {
     cin.ignore();//沒有這個的話getline會吃到\n
 
     while (n-->0){
-        //把一整行讀進p，最多256個字元
-        char p[256];
-        cin.getline(p, 256);
+        //把一整行讀進p，最多maxCharNum個字元，包含最後的'\0'
+        char p[maxCharNum];
+        cin.getline(p, maxCharNum);
 
         makeTrie(p, 0);
     }

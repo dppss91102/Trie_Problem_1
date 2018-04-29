@@ -4,9 +4,9 @@
 
 using namespace std;
 
-void makeTrie(char* p, int cursor, int num);
+void makeTrie(char* cursor, int currentNode);
 vector<map<int, char>> patterns;
-int nodeNum = 0;//node的編號
+int nextNode = 0;//node的編號
 
 int main() {
 
@@ -19,7 +19,7 @@ int main() {
         char p[256];
         cin.getline(p, 256);
 
-        makeTrie(p, 0, 0);
+        makeTrie(p, 0);
     }
 
     for (int i = 0; i < patterns.size(); ++i) {
@@ -32,40 +32,44 @@ int main() {
 }
 
 //用recursive的方式一個一個放進trie中
-void makeTrie(char* p, int cursor, int num){//p -> 字串，cursor -> 指向字元的指標，num -> vector的index
+void makeTrie(char* cursor, int currentNode){
+    /* cursor   -> 指向字元的指標
+     * currentNode  -> vector的index(現在的node)
+     * nextNode     -> 下一個要指到的node
+     * */
 
     //recursive的終止條件，讀到空字元 = 字串結束
-    if(p[cursor] == '\0')
+    if(*cursor == '\0')
         return;
 
-    //如果pattern[num]不存在，則放入空的map直到pattern[num]
-    while (patterns.size() < num + 1){
+    //如果pattern[currentNode]不存在，則放入空的map直到pattern[currentNode]
+    while (patterns.size() < currentNode + 1){
         map<int, char> map1;
         patterns.push_back(map1);
     }
 
     //如果這個node底下還沒有分支
-    if (patterns[num].empty()) {
-        //創一個分支到nodeNum
-        patterns[num].insert(pair<int, char>(++nodeNum, p[cursor]));
-        //cout << num << "->" << nodeNum << ":" << patterns[num].at(nodeNum) << endl;//for debugging
+    if (patterns[currentNode].empty()) {
+        //創一個分支指到nextNode
+        patterns[currentNode].insert(pair<int, char>(++nextNode, *cursor));
+        //cout << currentNode << "->" << nextNode << ":" << patterns[currentNode].at(nextNode) << endl;//for debugging
         //下一個字元，接在上面的node之後
-        makeTrie(p, cursor+1, num+1);
+        makeTrie(cursor+1, currentNode+1);
         return;
     }
 
     //如果這個node底下有分支了，檢查分支裡面是否有現在的字元
-    for (auto &it : patterns[num]) {
-        if (it.second == p[cursor]){
+    for (auto &it : patterns[currentNode]) {
+        if (it.second == *cursor){
             //如果有的話，則下一個字元接在它的node之後
-            makeTrie(p, cursor+1, it.first);
+            makeTrie(cursor+1, it.first);
             return;
         }
     }
 
     //會到這邊則代表這個node底下有分支且都不是現在的字元
-    //直接創一個分支到nodeNum
-    patterns[num].insert(std::pair<int, char>(++nodeNum, p[cursor]));
-    //cout << num << "->" << nodeNum << ":" << patterns[num].at(nodeNum) << endl;//for debugging
-    makeTrie(p, cursor+1, nodeNum);
+    //直接創一個分支指到nextNode
+    patterns[currentNode].insert(std::pair<int, char>(++nextNode, *cursor));
+    //cout << currentNode << "->" << nextNode << ":" << patterns[currentNode].at(nextNode) << endl;//for debugging
+    makeTrie(cursor+1, nextNode);
 }
